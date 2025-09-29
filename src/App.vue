@@ -1,4 +1,11 @@
 <script setup lang="ts">
+ import { ref, computed } from 'vue'
+
+ interface Step {
+   label: string
+   command: string
+   kind: 'cli' | 'guide'
+ }
 const metrics = [
   {
     title: 'Components',
@@ -35,20 +42,39 @@ const featureCards = [
   },
 ]
 
-const steps = [
+const steps: Step[] = [
   {
     label: 'Install dependencies',
     command: 'pnpm install',
+    kind: 'cli',
   },
   {
     label: 'Start dev server',
     command: 'pnpm run dev',
+    kind: 'cli',
   },
   {
-    label: 'Customize theme',
-    command: 'tailwind.config.ts',
+    label: 'Set theme',
+    command: 'Set data-theme="corporate" in index.html',
+    kind: 'guide',
   },
 ]
+
+// Currently selected step index
+const currentStep = ref(0)
+
+// Always-resolved current step (prevents undefined in template types)
+const current = computed<Step>(() => {
+  const idx = Math.min(Math.max(currentStep.value, 0), steps.length - 1)
+  return (
+    steps[idx] ??
+    steps[0] ?? {
+      label: 'Step',
+      command: '',
+      kind: 'guide',
+    }
+  )
+})
 </script>
 
 <template>
@@ -165,20 +191,26 @@ const steps = [
           <p class="mt-2 text-base-content/70">
             Follow these guided steps to adapt the template for your product.
           </p>
-          <ul class="steps steps-vertical mt-6 w-full gap-4 lg:steps-horizontal lg:gap-0">
+          <ul class="steps steps-vertical mt-6 w-full gap-4 lg:steps-horizontal lg:gap-0" aria-label="Setup steps">
             <li
               v-for="(step, index) in steps"
               :key="step.label"
-              class="step"
-              :class="{ 'step-primary': index === 0 }"
+              class="step cursor-pointer"
+              :class="{ 'step-primary': index === currentStep }"
+              role="button"
+              @click="currentStep = index"
+              :aria-current="index === currentStep ? 'step' : false"
             >
               {{ step.label }}
             </li>
           </ul>
           <div class="mt-6 space-y-3">
-            <h3 class="font-semibold">CLI snippets</h3>
-            <div class="mockup-code bg-neutral text-neutral-content">
-              <pre v-for="step in steps" :key="step.command" class="overflow-x-auto"><code>{{ step.command }}</code></pre>
+            <h3 class="font-semibold">Snippets</h3>
+            <div v-if="current.kind === 'cli'" class="mockup-code bg-neutral text-neutral-content">
+              <pre class="overflow-x-auto"><code>$ {{ current.command }}</code></pre>
+            </div>
+            <div v-else class="alert bg-base-200 text-base-content">
+              <span>{{ current.command }}</span>
             </div>
           </div>
         </div>
