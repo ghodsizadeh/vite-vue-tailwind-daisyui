@@ -5,26 +5,20 @@ import HelloWorld from './components/HelloWorld.vue'
 <template>
   <div>
     <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
+      <img
+        src="/vite.svg"
+        alt="Vite logo"
+        class="h-[6em] p-6 transition-[filter] duration-300 hover:drop-shadow-[0_0_2em_#646cffaa]"
+      />
     </a>
     <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
+      <img
+        src="./assets/vue.svg"
+        alt="Vue logo"
+        class="h-[6em] p-6 transition-[filter] duration-300 hover:drop-shadow-[0_0_2em_#42b883aa]"
+      />
     </a>
   </div>
   <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
