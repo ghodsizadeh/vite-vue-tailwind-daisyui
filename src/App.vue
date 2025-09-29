@@ -43,7 +43,12 @@ const featureCards = [
 ]
 
 const steps: Step[] = [
-  {
+{
+  label: "Degit project",
+  command: 'npx degit ghodsizadeh/vite-vue-tailwind-daisyui my-app',
+  kind: 'cli',
+},  
+{
     label: 'Install dependencies',
     command: 'pnpm install',
     kind: 'cli',
